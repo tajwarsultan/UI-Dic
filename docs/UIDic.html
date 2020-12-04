@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>UI-Dic</title>
+  </head>
+
+  <body>
+    
+
+    <div class="app"></div>
+    <div class="contact"></div>
+    <script>
+      class UILibrary {
+        constructor(el, initialState = {}, methods = {}) {
+          this.el = document.querySelector(el);
+          this.state = initialState;
+          this.methods = methods;
+
+          this.renderTemplate();
+        }
+
+        updateState(obj) {
+          Object.keys(obj).forEach((variable) => {
+            const variableValue = obj[variable];
+            this.state[variable] = variableValue;
+          });
+          this.renderTemplate();
+        }
+
+        render() {
+          return ``;
+        }
+
+        renderTemplate() {
+          let template = this.render();
+          Object.keys(this.state).forEach((variable) => {
+            const variableValue = this.state[variable];
+            template = template.replace(
+              new RegExp(`{{${variable}}}`, "g"),
+              variableValue
+            );
+          });
+          this.el.innerHTML = template;
+        }
+      }
+
+      class Home extends UILibrary {
+        constructor(el, state, methods) {
+          super(el, state, methods);
+          setTimeout(() => {
+            this.updateState({
+              siteName: "ZS-Plaza",
+              date: "2005 Oct 18",
+            });
+          }, 1500);
+        }
+        render() {
+          return `<h1>Welcome to {{siteName}} and its Construction date is {{date}}. {{siteName}} is very Beautifull</h1>`;
+        }
+      }
+
+      class About extends UILibrary {
+        render() {
+          return `
+                    <div>This is contact page</div>
+                `;
+        }
+      }
+
+      const app = new Home(
+        ".app",
+        {
+          siteName: "DAR-Plaza",
+          date: "2008 Aug 05",
+        },
+        {}
+      );
+      const about = new About(".contact", {}, {});
+    </script>
+  </body>
+</html>
